@@ -2,6 +2,10 @@ from lt_types import *
 from lt_parser import *
 from lt_env import *
 
+import argparse
+import traceback
+import sys
+
 def finished(tokens):
     count = 0
     for token in tokens:
@@ -20,23 +24,41 @@ def repl(env, prompt='>>> '):
     "A prompt-read-eval-print loop."
     all_tokens = []
     while True:
-        tokens = tokenize(input(prompt))
-        all_tokens += tokens
-        while finished(all_tokens) and len(all_tokens) > 0:
-            parse_result, all_tokens = parse(all_tokens)
-            val = eval(parse_result, env)
-            if val is not None:
-                print(lispstr(val))
+        try:
+            tokens = tokenize(input(prompt))
+            all_tokens += tokens
+            while finished(all_tokens) and len(all_tokens) > 0:
+                parse_result, all_tokens = parse(all_tokens)
+                val = eval(parse_result, env)
+                if val is not None:
+                    print(lispstr(val))
+        except SystemExit:
+            raise
+        except EOFError:
+            raise
+        except KeyboardInterrupt:
+            raise
+        except:
+            # print('Traceback (most recent call last):')
+            # info = sys.exc_info()
+            # traceback.print_tb(info[2])
+            # print('{}: {}'.format(info[0].__name__, info[1]))
+            traceback.print_exc()
+            all_tokens = []
 
-def lispstr(exp):
-    "Convert a Python object back into a Lisp-readable string."
-    if isinstance(exp, List):
-        return '(' + ' '.join(map(lispstr, exp)) + ')'
-    else:
-        return str(exp)
+def repl_file(file, env):
+    "A file-based repl."
+    all_tokens = []
+    with open(file, 'r') as f:
+        for line in f.readlines():
+            tokens = tokenize(line)
+            all_tokens += tokens
+            while finished(all_tokens) and len(all_tokens) > 0:
+                parse_result, all_tokens = parse(all_tokens)
+                _ = eval(parse_result, env)
 
 class Procedure(object):
-    "A user-defined Scheme procedure."
+    "A user-defined Lisp procedure."
     def __init__(self, parms, body, env):
         self.parms, self.body, self.env = parms, body, env
     def __call__(self, *args):
@@ -82,5 +104,11 @@ def eval(x, env):
                 return proc(*args)
 
 if __name__ == '__main__':
+    arg_parser = argparse.ArgumentParser(description='LispTorch: Let\'s use PyTorch in the classic Lisp style!')
+    arg_parser.add_argument('-f', '--file', type=str, default='')
+    args = arg_parser.parse_args()
     global_env = standard_env()
-    repl(global_env)
+    if args.file == '':
+        repl(global_env)
+    else:
+        repl_file(args.file, global_env)

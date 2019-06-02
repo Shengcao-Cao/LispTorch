@@ -31,3 +31,10 @@ def atom(token):
         try: return float(token)
         except ValueError:
             return Symbol(token)
+
+def lispstr(exp):
+    "Convert a Python object back into a Lisp-readable string."
+    if isinstance(exp, List):
+        return '(' + ' '.join(map(lispstr, exp)) + ')'
+    else:
+        return str(exp)
