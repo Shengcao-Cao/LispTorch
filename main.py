@@ -94,6 +94,10 @@ def eval(x, env):
         elif x[0] == 'lambda':         # (lambda (var...) body)
             (_, parms, body) = x
             return Procedure(parms, body, env)
+        elif x[0] == 'include':        # (include header)
+            header = x[1] + '.lisp'
+            repl_file(header, env)
+            return None
         else:                          # (proc arg...)
             proc = eval(x[0], env)
             args = []
