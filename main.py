@@ -40,6 +40,12 @@ def eval(x, env):
             (_, var, exp) = x
             env[var] = eval(exp, env)
             return None
+        elif x[0] == 'let':            # (let var exp)
+            (_, vars, exp) = x
+            parms = [var[0] for var in vars]
+            args = [var[1] for var in vars]
+            env = Env(parms, args, env)
+            return eval(exp, env)
         elif x[0] == 'set!':           # (set! var exp)
             (_, var, exp) = x
             env.find(var)[var] = eval(exp, env)
