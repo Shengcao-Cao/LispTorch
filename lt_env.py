@@ -9,7 +9,7 @@ def standard_env():
     env = Env()
     env.update(vars(math)) # sin, cos, sqrt, pi, ...
     env.update({
-        '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv,
+        '+':op.add, '-':op.sub, '*':op.mul, '/':op.truediv, '%':op.mod,
         '>':op.gt, '<':op.lt, '>=':op.ge, '<=':op.le, '=':op.eq,
         'abs':     abs,
         'append':  op.add,
