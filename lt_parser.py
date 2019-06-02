@@ -33,6 +33,7 @@ def tokenize(s):
         token = ''
     if in_string:
         raise SyntaxError('unexpected \"')
+    print(tokens)
     return tokens
     # return s.replace('(',' ( ').replace(')',' ) ').split()
 
