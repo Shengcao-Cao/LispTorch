@@ -1,5 +1,6 @@
 from lt_types import *
 from lt_parser import *
+import lt_torch
 import math
 import operator as op
 
@@ -34,6 +35,7 @@ def standard_env():
         'print':   lambda x: print(lispstr(x)),
         'exit':    lambda: exit(0),
     })
+    env.update(lt_torch.torch_env)
     return env
 
 class Env(dict):
