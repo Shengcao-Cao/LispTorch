@@ -203,9 +203,9 @@ def lisp_func(string, fout):
 		token = token.replace(',', '')
 		tokens.append(token)
 
-	func = '(define %s (lambda (' % lisp_name
+	func = '(define ' + lisp_name + '\n'+'	(lambda ('
 
-	func += ' '.join(tokens[2:-1]) + ') (' + name
+	func += ' '.join(tokens[2:-1]) + ')\n' + '		(' + name
 
 	args = []
 
@@ -217,7 +217,7 @@ def lisp_func(string, fout):
 
 	func += ' ' + ' '.join(args) + ')))'
 
-	fout.write(func + '\n')
+	fout.write(func + '\n\n')
 
 
 if __name__ == '__main__':

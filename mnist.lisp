@@ -43,7 +43,7 @@
 (define train_loader (t_utils_data_DataLoader train_dataset batch_size:100 shuffle:#t num_workers:4 pin_memory:#t))
 (define train_itr (t_iter train_loader))
 (define test_dataset (tv_datasets_MNIST #f transform #n #t))
-(define test_loader (t_utils_data_DataLoader train_dataset batch_size:100 shuffle:#f num_workers:4 pin_memory:#t))
+(define test_loader (t_utils_data_DataLoader test_dataset batch_size:100 shuffle:#f num_workers:4 pin_memory:#t))
 (define test_itr (t_iter test_loader))
 
 (define model
@@ -63,4 +63,4 @@ model
 
 (define optimizer (t_optim_SGD (t_parameters model) lr:0.01 momentum:0.9))
 
-(train_test model train_itr test_itr optimizer 100)
+(train_test model train_itr test_itr optimizer 5)
