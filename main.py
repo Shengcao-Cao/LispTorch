@@ -98,12 +98,21 @@ def eval(x, env):
             proc = eval(x[0], env)
             args = []
 
-            for exp in x[1:]:
+            pointer = 1
+
+            while pointer < len(x):
+                exp = x[pointer]
                 if type(exp) is str and ':' in exp:
                     p, a = exp.split(':')
-                    args.append((p, eval(atom(a), env)))
+                    if a is '':
+                        pointer += 1
+                        exp = x[pointer]
+                        args.append((p, eval(exp, env)))
+                    else:
+                        args.append((p, eval(atom(a), env)))
                 else:
                     args.append(eval(exp, env))
+                pointer += 1
 
             if isinstance(proc, Procedure):
                 x = proc.body
