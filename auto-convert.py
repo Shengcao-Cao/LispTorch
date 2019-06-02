@@ -16,8 +16,6 @@ my_list = [
 #	(lambda (x y:blabla z:blabla)
 #		(_torch_xxx x y z)))
 
-# '_torch_zeros': lambda args, **kwargs: torch.zeros(*args, **kwargs),
-
 def convert(string):
 	tokens = tokenize(string)
 	name = tokens[0].replace('torch.', '_torch_')

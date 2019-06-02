@@ -41,11 +41,14 @@ def standard_env():
 class Env(dict):
     "An environment: a dict of {'var':val} pairs, with an outer Env."
     def __init__(self, parms=(), args=(), outer=None):
+
         arg_dict = dict()
         for parm in parms:
             if ':' in parm:
                 p, a = parm.split(':')
                 arg_dict[p] = atom(a)
+                if isinstance(arg_dict[p], Symbol):
+                    arg_dict[p] = outer.find(arg_dict[p])[arg_dict[p]]
         for arg, parm in zip(args, parms):
             if type(arg) is tuple:
                 p, a = arg
