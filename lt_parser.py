@@ -6,7 +6,36 @@ def parse(program):
 
 def tokenize(s):
     "Convert a string into a list of tokens."
-    return s.replace('(',' ( ').replace(')',' ) ').split()
+    tokens = []
+    token = ''
+    in_string = False
+    for c in s:
+        if c == '\"':
+            in_string = not(in_string)
+            token += c
+        else:
+            if in_string:
+                token += c
+            else:
+                if c == '(' or c == ')':
+                    if len(token) > 0:
+                        tokens.append(token)
+                        token = ''
+                    tokens.append(c)
+                elif c in [' ', '\t', '\n']:
+                    if len(token) > 0:
+                        tokens.append(token)
+                    token = ''
+                else:
+                    token += c
+    if len(token) > 0:
+        tokens.append(token)
+        token = ''
+    if in_string:
+        raise SyntaxError('unexpected \"')
+    print(tokens)
+    return tokens
+    # return s.replace('(',' ( ').replace(')',' ) ').split()
 
 def read_from_tokens(tokens):
     "Read an expression from a sequence of tokens."
@@ -30,6 +59,10 @@ def atom(token):
         return True
     elif token == '#f':
         return False
+    elif token == '#n':
+        return None
+    elif token[0] == '\"' and token[-1] == '\"':
+        return str(token[1:-1])
     try: return int(token)
     except ValueError:
         try: return float(token)
@@ -45,4 +78,6 @@ def lispstr(exp):
             return '#t'
         elif exp is False:
             return '#f'
+        elif exp is None:
+            return '#n'
         return str(exp)

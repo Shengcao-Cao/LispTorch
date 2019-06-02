@@ -31,7 +31,8 @@ def standard_env():
         'procedure?': callable,
         'round':   round,
         'symbol?': lambda x: isinstance(x, Symbol),
-        'print':   lambda x: print(lispstr(x)),
+        'print':   lambda x: print(lispstr(x), end=''),
+        'println': lambda x: print(lispstr(x), end='\n'),
         'exit':    lambda: exit(0),
     })
     return env
