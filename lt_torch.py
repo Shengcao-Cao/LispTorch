@@ -1,7 +1,23 @@
 import torch
+import torchvision
+class MyReshape(torch.nn.Module):
+	def __init__(self, *args):
+		super(Reshape, self).__init__()
+		self.shape = args
+
+	def forward(self, x):
+		return x.view(self.shape)
+
 torch_env = {
+    't_nn_Reshape': MyReshape
+	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download)    't_iter': lambda _list: iter(_list),
+    't_next': lambda iter: next(iter),
+    't_zero_grad': lambda optimizer: optimizer.zero_grad(),
+    't_step': lambda optimizer: optimizer.step(),
+    't_backward': lambda loss: loss.backward(),
     't_view': lambda tensor, _list: tensor.view(*_list),
     't_size': lambda tensor: tensor.size(),
+    't_item': lambda tensor: tensor.item(),
     't_strided': torch.strided,
     '_torch_is_tensor': lambda obj: torch.is_tensor(obj=obj),
     '_torch_numel': lambda input: torch.numel(input=input),
@@ -97,6 +113,7 @@ torch_env = {
     '_torch_var': lambda input, dim, keepdim, unbiased, out: torch.var(input=input, dim=dim, keepdim=keepdim, unbiased=unbiased, out=out),
     '_torch_argsort': lambda input, dim, descending, out: torch.argsort(input=input, dim=dim, descending=descending, out=out),
     '_torch_allclose': lambda self, other, rtol, atol, equal_nan: torch.allclose(self=self, other=other, rtol=rtol, atol=atol, equal_nan=equal_nan),
+    '_torch_eq': lambda input, other, out: torch.eq(input=input, other=other, out=out),
     '_torch_equal': lambda tensor1, tensor2: torch.equal(tensor1=tensor1, tensor2=tensor2),
     '_torch_ge': lambda input, other, out: torch.ge(input=input, other=other, out=out),
     '_torch_gt': lambda input, other, out: torch.gt(input=input, other=other, out=out),
@@ -136,4 +153,15 @@ torch_env = {
     '_torch_matmul': lambda tensor1, tensor2, out: torch.matmul(tensor1=tensor1, tensor2=tensor2, out=out),
     '_torch_mm': lambda mat1, mat2, out: torch.mm(mat1=mat1, mat2=mat2, out=out),
     '_torch_mv': lambda mat, vec, out: torch.mv(mat=mat, vec=vec, out=out),
+    '_torch_utils_data_DataLoader': lambda dataset, batch_size, shuffle, sampler, batch_sampler, num_workers, pin_memory, drop_last, timeout, worker_init_fn: torch.utils.data.DataLoader(dataset=dataset, batch_size=batch_size, shuffle=shuffle, sampler=sampler, batch_sampler=batch_sampler, num_workers=num_workers, pin_memory=pin_memory, drop_last=drop_last, timeout=timeout, worker_init_fn=worker_init_fn),
+    '_torch_optim_SGD': lambda params, lr, momentum, dampening, weight_decay, nesterov: torch.optim.SGD(params=params, lr=lr, momentum=momentum, dampening=dampening, weight_decay=weight_decay, nesterov=nesterov),
+    '_torch_optim_Adam': lambda params, lr, eps, weight_decay, amsgrad: torch.optim.Adam(params=params, lr=lr, eps=eps, weight_decay=weight_decay, amsgrad=amsgrad),
+    '_torch_optim_Adagrad': lambda params, lr, lr_decay, weight_decay, initial_accumulator_value: torch.optim.Adagrad(params=params, lr=lr, lr_decay=lr_decay, weight_decay=weight_decay, initial_accumulator_value=initial_accumulator_value),
+    '_torch_nn_Sequential': lambda args: torch.nn.Sequential(*args, ),
+    '_torch_nn_Conv2d': lambda in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias: torch.nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias),
+    '_torch_nn_ReLU': lambda inplace: torch.nn.ReLU(inplace=inplace),
+    '_torch_nn_MaxPool2d': lambda kernel_size, stride, padding, dilation, return_indices, ceil_mode: torch.nn.MaxPool2d(kernel_size=kernel_size, stride=stride, padding=padding, dilation=dilation, return_indices=return_indices, ceil_mode=ceil_mode),
+    '_torchvision_transforms_Compose': lambda transforms: torchvision.transforms.Compose(transforms=transforms),
+    '_torchvision_transforms_ToTensor': lambda : torchvision.transforms.ToTensor(),
+    '_torchvision_transforms_Normalize': lambda mean, std, inplace: torchvision.transforms.Normalize(mean=mean, std=std, inplace=inplace),
 }

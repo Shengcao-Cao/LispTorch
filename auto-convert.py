@@ -99,6 +99,7 @@ my_list = [
 	'torch.var(input, dim, keepdim=False, unbiased=True, out=None)',
 	'torch.argsort(input, dim=-1, descending=False, out=None)',
 	'torch.allclose(self, other, rtol=1e-05, atol=1e-08, equal_nan=False)',
+	'torch.eq(input, other, out=None)',
 	'torch.equal(tensor1, tensor2)',
 	'torch.ge(input, other, out=None)',
 	'torch.gt(input, other, out=None)',
@@ -138,7 +139,17 @@ my_list = [
 	'torch.matmul(tensor1, tensor2, out=None)',
 	'torch.mm(mat1, mat2, out=None)',
 	'torch.mv(mat, vec, out=None)',
-	
+	'torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, sampler=None, batch_sampler=None, num_workers=0, pin_memory=False, drop_last=False, timeout=0, worker_init_fn=None)',
+	'torch.optim.SGD(params, lr, momentum=0, dampening=0, weight_decay=0, nesterov=False)',
+	'torch.optim.Adam(params, lr=0.001, eps=1e-08, weight_decay=0, amsgrad=False)',
+	'torch.optim.Adagrad(params, lr=0.01, lr_decay=0, weight_decay=0, initial_accumulator_value=0)',
+	'torch.nn.Sequential(*args)',
+	'torch.nn.Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True)',
+	'torch.nn.ReLU(inplace=False)',
+	'torch.nn.MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)',
+	'torchvision.transforms.Compose(transforms)',
+	'torchvision.transforms.ToTensor()',
+	'torchvision.transforms.Normalize(mean, std, inplace=False)',
 ]
 
 
@@ -148,7 +159,7 @@ my_list = [
 
 def convert(string, fout):
 	tokens = tokenize(string)
-	name = tokens[0].replace('torch.', '_torch_').replace('.', '_')
+	name = tokens[0].replace('torchvision.', '_torchvision_').replace('torch.', '_torch_').replace('.', '_')
 
 	if '*' in string:
 		args = []
@@ -173,12 +184,13 @@ def convert(string, fout):
 
 def lisp_func(string, fout):
 	raw_tokens = tokenize(string)
-	name = raw_tokens[0].replace('torch.', '_torch_').replace('.', '_')
-	lisp_name = raw_tokens[0].replace('torch.', 't_').replace('.', '_')
+	name = raw_tokens[0].replace('torchvision.', '_torchvision_').replace('torch.', '_torch_').replace('.', '_')
+	lisp_name = raw_tokens[0].replace('torchvision.', 'tv_').replace('torch.', 't_').replace('.', '_')
 
 	tokens = []
 
 	for token in raw_tokens:
+		token = token.replace('torchvision.', 'tv_')
 		token = token.replace('torch.', 't_')
 		token = token.replace('.', '_')
 		token = token.replace('=', ':')
@@ -208,9 +220,25 @@ def lisp_func(string, fout):
 if __name__ == '__main__':
 	with open('lt_torch.py', 'w') as fout:
 		fout.write('import torch\n')
+		fout.write('import torchvision\n')
+		fout.write('class MyReshape(torch.nn.Module):\n'
+				   '	def __init__(self, *args):\n'
+        		   '		super(Reshape, self).__init__()\n'
+        		   '		self.shape = args\n'
+        		   '\n'
+    			   '	def forward(self, x):\n'
+        		   '		return x.view(self.shape)\n\n')
 		fout.write('torch_env = {' + '\n')
+		fout.write("    't_nn_Reshape': MyReshape" + '\n')
+		fout.write("	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download)")
+		fout.write("    't_iter': lambda _list: iter(_list)," + '\n')
+		fout.write("    't_next': lambda iter: next(iter)," + '\n')
+		fout.write("    't_zero_grad': lambda optimizer: optimizer.zero_grad()," + '\n')
+		fout.write("    't_step': lambda optimizer: optimizer.step()," + '\n')
+		fout.write("    't_backward': lambda loss: loss.backward()," + '\n')
 		fout.write("    't_view': lambda tensor, _list: tensor.view(*_list)," + '\n')
 		fout.write("    't_size': lambda tensor: tensor.size()," + '\n')
+		fout.write("    't_item': lambda tensor: tensor.item()," + '\n')
 		fout.write("    't_strided': torch.strided," + '\n')
 		for func in my_list:
 			convert(func, fout)
