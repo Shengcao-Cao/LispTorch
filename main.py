@@ -96,7 +96,15 @@ def eval(x, env):
             return Procedure(parms, body, env)
         else:                          # (proc arg...)
             proc = eval(x[0], env)
-            args = [eval(exp, env) for exp in x[1:]]
+            args = []
+
+            for exp in x[1:]:
+                if type(exp) is str and ':' in exp:
+                    p, a = exp.split(':')
+                    args.append((p, eval(atom(a), env)))
+                else:
+                    args.append(eval(exp, env))
+
             if isinstance(proc, Procedure):
                 x = proc.body
                 env = Env(proc.parms, args, proc.env)

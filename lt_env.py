@@ -45,9 +45,9 @@ class Env(dict):
                 p, a = parm.split(':')
                 arg_dict[p] = atom(a)
         for arg, parm in zip(args, parms):
-            if arg is str and ':' in arg:
-                p, a = arg.split(':')
-                arg_dict[p] = atom(a)
+            if type(arg) is tuple:
+                p, a = arg
+                arg_dict[p] = a
             else:
                 if ':' in parm:
                     p, a = parm.split(':')
@@ -63,10 +63,9 @@ class Env(dict):
             if p not in arg_dict:
                 raise Exception('Parameter %s not given.' % p)
 
-        #print(arg_dict)
-
         self.update(arg_dict)
         self.outer = outer
+
     def find(self, var):
         "Find the innermost Env where var appears."
         return self if (var in self) else self.outer.find(var)
