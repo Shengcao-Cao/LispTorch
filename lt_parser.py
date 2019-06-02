@@ -26,6 +26,10 @@ def read_from_tokens(tokens):
 
 def atom(token):
     "Numbers become numbers; every other token is a symbol."
+    if token == '#t':
+        return True
+    elif token == '#f':
+        return False
     try: return int(token)
     except ValueError:
         try: return float(token)
@@ -37,4 +41,8 @@ def lispstr(exp):
     if isinstance(exp, List):
         return '(' + ' '.join(map(lispstr, exp)) + ')'
     else:
+        if exp is True:
+            return '#t'
+        elif exp is False:
+            return '#f'
         return str(exp)
