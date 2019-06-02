@@ -10,3 +10,7 @@
 (print (map fib (range 0 20)))
 (define abc (lambda (x) (let ((c 4) (b 2)) (+ c b))))
 (print (abc 0))
+(define argfunc (lambda (x y:2 z:3) (begin (print x) (print y) (print z))))
+(argfunc 1)
+(argfunc 1 z:5)
+(argfunc 1 z:5 y:(- 4 10))
