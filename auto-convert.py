@@ -231,10 +231,14 @@ if __name__ == '__main__':
         		   '\n'
     			   '	def forward(self, x):\n'
         		   '		return x.view(*self.shape)\n\n')
+		fout.write('def one_shot_iterator(dataloader):\n'
+    			   '	while True:\n'
+        		   '		for data in dataloader:\n'
+            	   '			yield data\n\n')
 		fout.write('torch_env = {' + '\n')
 		fout.write("    't_nn_Reshape': MyReshape," + '\n')
 		fout.write("	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download)," + '\n')
-		fout.write("    't_iter': lambda _list: iter(_list)," + '\n')
+		fout.write("    't_iter': lambda dataloader: one_shot_iterator(dataloader)," + '\n')
 		fout.write("    't_next': lambda iter: next(iter)," + '\n')
 		fout.write("    't_zero_grad': lambda optimizer: optimizer.zero_grad()," + '\n')
 		fout.write("    't_step': lambda optimizer: optimizer.step()," + '\n')

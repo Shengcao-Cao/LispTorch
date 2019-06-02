@@ -8,10 +8,15 @@ class MyReshape(torch.nn.Module):
 	def forward(self, x):
 		return x.view(*self.shape)
 
+def one_shot_iterator(dataloader):
+	while True:
+		for data in dataloader:
+			yield data
+
 torch_env = {
     't_nn_Reshape': MyReshape,
 	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download),
-    't_iter': lambda _list: iter(_list),
+    't_iter': lambda dataloader: one_shot_iterator(dataloader),
     't_next': lambda iter: next(iter),
     't_zero_grad': lambda optimizer: optimizer.zero_grad(),
     't_step': lambda optimizer: optimizer.step(),
