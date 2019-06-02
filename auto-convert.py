@@ -7,16 +7,16 @@ from lt_parser import *
 my_list = [
 	'torch.is_tensor(obj)',
 	'torch.numel(input)',
-	'torch.tensor(data, dtype=None, device=None, requires_grad=False, pin_memory=False)',
-	'torch.as_tensor(data, dtype=None, device=None)',
+	'torch.tensor(data, device=None, requires_grad=False, pin_memory=False)',
+	'torch.as_tensor(data, device=None)',
 	'torch.from_numpy(ndarray)',
-	'torch.zeros(*sizes, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.ones(*sizes, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',	
-	'torch.arange(start=0, end, step=1, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.range(start=0, end, step=1, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.eye(n, m=None, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.empty(*sizes, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False, pin_memory=False)',
-	'torch.full(size, fill_value, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.zeros(*sizes, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.ones(*sizes, out=None, layout=torch.strided, device=None, requires_grad=False)',	
+	'torch.arange(start=0, end, step=1, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.range(start=0, end, step=1, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.eye(n, m=None, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.empty(*sizes, out=None, layout=torch.strided, device=None, requires_grad=False, pin_memory=False)',
+	'torch.full(size, fill_value, out=None, layout=torch.strided, device=None, requires_grad=False)',
 	'torch.cat(tensors, dim=0, out=None)',
 	'torch.chunk(tensor, chunks, dim=0)',
 	'torch.gather(input, dim, index, out=None, sparse_grad=False)',
@@ -37,9 +37,9 @@ my_list = [
 	'torch.manual_seed(seed)',
 	'torch.initial_seed()',
 	'torch.normal(mean, std=1.0, out=None)',
-	'torch.rand(*sizes, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.randint(low=0, high, size, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.randn(*sizes, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.rand(*sizes, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.randint(low=0, high, size, out=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.randn(*sizes, out=None, layout=torch.strided, device=None, requires_grad=False)',
 	'torch.get_num_threads()',
 	'torch.set_num_threads(int)',
 	'torch.abs(input, out=None)',
@@ -81,22 +81,22 @@ my_list = [
 	'torch.tan(input, out=None)',
 	'torch.tanh(input, out=None)',
 	'torch.trunc(input, out=None)',
-	'torch.argmax(input, dim, keepdim=False)',
-	'torch.argmin(input, dim, keepdim=False, out=None)',
-	'torch.cumprod(input, dim, out=None, dtype=None)',
-	'torch.cumsum(input, dim, out=None, dtype=None)',
+	'torch.argmax(input, dim)',
+	'torch.argmin(input, dim, out=None)',
+	'torch.cumprod(input, dim, out=None)',
+	'torch.cumsum(input, dim, out=None)',
 	'torch.dist(input, other, p=2)',
-	'torch.logsumexp(input, dim, keepdim=False, out=None)',
-	'torch.mean(input, dim, keepdim=False, out=None)',
-	'torch.median(input, dim=-1, keepdim=False, values=None, indices=None)',
-	'torch.mode(input, dim=-1, keepdim=False, values=None, indices=None)',
-	'torch.norm(input, p="fro", dim=None, keepdim=False, out=None, dtype=None)',
-	'torch.prod(input, dim, keepdim=False, dtype=None)',
-	'torch.std(input, dim, keepdim=False, unbiased=True, out=None)',
-	'torch.sum(input, dim, keepdim=False, dtype=None)',
+	'torch.logsumexp(input, dim, out=None)',
+	'torch.mean(input, dim, out=None)',
+	'torch.median(input, dim=-1, values=None, indices=None)',
+	'torch.mode(input, dim=-1, values=None, indices=None)',
+	'torch.norm(input, p="fro", dim=None, out=None)',
+	'torch.prod(input, dim)',
+	'torch.std(input, dim, unbiased=True, out=None)',
+	'torch.sum(input, dim)',
 	'torch.unique(input, sorted=True, return_inverse=False, return_counts=False, dim=None)',
 	'torch.unique_consecutive(input, return_inverse=False, return_counts=False, dim=None)',
-	'torch.var(input, dim, keepdim=False, unbiased=True, out=None)',
+	'torch.var(input, dim, unbiased=True, out=None)',
 	'torch.argsort(input, dim=-1, descending=False, out=None)',
 	'torch.allclose(self, other, rtol=1e-05, atol=1e-08, equal_nan=False)',
 	'torch.eq(input, other, out=None)',
@@ -108,8 +108,8 @@ my_list = [
 	'torch.isnan(tensor)',
 	'torch.le(input, other, out=None)',
 	'torch.lt(input, other, out=None)',
-	'torch.max(input, dim, keepdim=False, out=None)',
-	'torch.min(input, dim, keepdim=False, out=None)',
+	'torch.max(input, dim, out=None)',
+	'torch.min(input, dim, out=None)',
 	'torch.ne(input, other, out=None)',
 	'torch.sort(input, dim=-1, descending=False, out=None)',
 	'torch.topk(input, k, dim=None, largest=True, sorted=True, out=None)',
@@ -118,9 +118,9 @@ my_list = [
 	'torch.rfft(input, signal_ndim, normalized=False, onesided=True)',
 	'torch.irfft(input, signal_ndim, normalized=False, onesided=True, signal_sizes=None)',
 	'torch.stft(input, n_fft, hop_length=None, win_length=None, window=None, center=True, pad_mode="reflect", normalized=False, onesided=True)',
-	'torch.bartlett_window(window_length, periodic=True, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.blackman_window(window_length, periodic=True, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
-	'torch.hamming_window(window_length, periodic=True, alpha=0.54, beta=0.46, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.bartlett_window(window_length, periodic=True, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.blackman_window(window_length, periodic=True, layout=torch.strided, device=None, requires_grad=False)',
+	'torch.hamming_window(window_length, periodic=True, alpha=0.54, beta=0.46, layout=torch.strided, device=None, requires_grad=False)',
 	'torch.cross(input, other, dim=-1, out=None)',
 	'torch.diag(input, diagonal=0, out=None)',
 	'torch.flatten(input, start_dim=0, end_dim=-1)',
@@ -150,6 +150,9 @@ my_list = [
 	'torchvision.transforms.Compose(transforms)',
 	'torchvision.transforms.ToTensor()',
 	'torchvision.transforms.Normalize(mean, std, inplace=False)',
+	'torch.nn.Linear(in_features, out_features, bias=True)',
+	'torch.nn.LogSoftmax(dim=None)',
+	'torch.nn.functional.nll_loss(input, target, weight=None, size_average=None, ignore_index=-100, reduce=None)',
 ]
 
 
@@ -223,19 +226,20 @@ if __name__ == '__main__':
 		fout.write('import torchvision\n')
 		fout.write('class MyReshape(torch.nn.Module):\n'
 				   '	def __init__(self, *args):\n'
-        		   '		super(Reshape, self).__init__()\n'
+        		   '		super(MyReshape, self).__init__()\n'
         		   '		self.shape = args\n'
         		   '\n'
     			   '	def forward(self, x):\n'
-        		   '		return x.view(self.shape)\n\n')
+        		   '		return x.view(*self.shape)\n\n')
 		fout.write('torch_env = {' + '\n')
-		fout.write("    't_nn_Reshape': MyReshape" + '\n')
-		fout.write("	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download)")
+		fout.write("    't_nn_Reshape': MyReshape," + '\n')
+		fout.write("	'tv_datasets_MNIST': lambda train=True, transform=None, target_transform=None, download=False: torchvision.datasets.MNIST('../data', train=train, transform=transform, target_transform=target_transform, download=download)," + '\n')
 		fout.write("    't_iter': lambda _list: iter(_list)," + '\n')
 		fout.write("    't_next': lambda iter: next(iter)," + '\n')
 		fout.write("    't_zero_grad': lambda optimizer: optimizer.zero_grad()," + '\n')
 		fout.write("    't_step': lambda optimizer: optimizer.step()," + '\n')
 		fout.write("    't_backward': lambda loss: loss.backward()," + '\n')
+		fout.write("    't_parameters': lambda model: model.parameters()," + '\n')
 		fout.write("    't_view': lambda tensor, _list: tensor.view(*_list)," + '\n')
 		fout.write("    't_size': lambda tensor: tensor.size()," + '\n')
 		fout.write("    't_item': lambda tensor: tensor.item()," + '\n')

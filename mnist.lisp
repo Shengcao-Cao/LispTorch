@@ -9,7 +9,7 @@
                               (define target (car (cdr batch)))
                               (t_zero_grad optimizer)
                               (define output (model data))
-                              (define loss (t_F_nll_loss output target))
+                              (define loss (t_nn_functional_nll_loss output target))
                               (t_backward loss)
                               (t_step optimizer)
                               (train model train_itr optimizer (- iteration 1)))))))
@@ -23,26 +23,26 @@
                               (define target (car (cdr batch)))
                               (define output (model data))
                               (define pred (t_argmax output dim:1 keepdim:#t))
-                              (define correct_i (t_item (t_sum (t_eq pred (t_view target (t_size pred))) dim:(list 0 1))))
+                              (define correct_i (t_item (t_sum (t_eq pred (t_view target (t_size pred))) dim:(list 0))))
                               (define total_i (t_size target 0))
                               (test model test_itr (- iteration 1) (+ correct correct_i) (+ total total_i)))))))
 
 (define train_test
     (lambda (model train_itr test_itr optimizer round)
-            (begin (if (<= round 0))
-                   model
-                   (begin (train model train_itr optimizer 50)
-                       (if (= (% round 10) 0)
-                           (test model test_itr 50)
-                           #n)
-                       (train_test model train_itr test_itr optimizer (- round 1))
-                       (train model)))))
+            (begin (if (<= round 0)
+                       model
+                       (begin (train model train_itr optimizer 50)
+                           (if (= (% round 10) 0)
+                               (test model test_itr 50 0 0)
+                               #n)
+                           (train_test model train_itr test_itr optimizer (- round 1))
+                           (train model))))))
 
-(define transform (tv_transforms_Compose (list ((tv_transforms_ToTensor) (tv_transforms_Normalize (list 0.1307) (list 0.3081))))))
-(define train_dataset (tv_datasets_MNIST "../data" train:#t transform:transform))
+(define transform (tv_transforms_Compose (list (tv_transforms_ToTensor) (tv_transforms_Normalize (list 0.1307) (list 0.3081)))))
+(define train_dataset (tv_datasets_MNIST #t transform #n #t))
 (define train_loader (t_utils_data_DataLoader train_dataset batch_size:128 shuffle:#t num_workers:4 pin_memory:#t))
 (define train_itr (t_iter train_loader))
-(define test_dataset (tv_datasets_MNIST "../data" train:#f transform:transform))
+(define test_dataset (tv_datasets_MNIST #f transform #n #t))
 (define test_loader (t_utils_data_DataLoader train_dataset batch_size:128 shuffle:#f num_workers:4 pin_memory:#t))
 (define test_itr (t_iter test_loader))
 
@@ -61,4 +61,4 @@
 
 (define optimizer (t_optim_SGD (t_parameters model) lr:0.01 momentum:0.9))
 
-(train_test model train_itr optimizer 100)
+(train_test model train_itr test_itr optimizer 100)
