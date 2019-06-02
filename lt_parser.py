@@ -30,6 +30,8 @@ def atom(token):
         return True
     elif token == '#f':
         return False
+    elif token == '#n':
+        return None
     try: return int(token)
     except ValueError:
         try: return float(token)
@@ -45,4 +47,6 @@ def lispstr(exp):
             return '#t'
         elif exp is False:
             return '#f'
+        elif exp is None:
+            return '#n'
         return str(exp)
