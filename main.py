@@ -99,8 +99,12 @@ def eval(x, env):
             repl_file(header, env)
             return None
         else:                          # (proc arg...)
-            proc = eval(x[0], env)
-            args = []
+            try:
+                proc = eval(x[0], env)
+                args = []
+            except:
+                print('x[0]:', x)
+                raise
 
             pointer = 1
 
@@ -111,18 +115,35 @@ def eval(x, env):
                     if a is '':
                         pointer += 1
                         exp = x[pointer]
-                        args.append((p, eval(exp, env)))
+                        try:
+                            args.append((p, eval(exp, env)))
+                        except:
+                            print('exp:', exp)
+                            raise
                     else:
-                        args.append((p, eval(atom(a), env)))
+                        try:
+                            args.append((p, eval(atom(a), env)))
+                        except:
+                            print('exp:', exp)
+                            raise
                 else:
-                    args.append(eval(exp, env))
+                    try:
+                        args.append(eval(exp, env))
+                    except:
+                        print('exp:', exp)
+                        raise
                 pointer += 1
 
             if isinstance(proc, Procedure):
                 x = proc.body
                 env = Env(proc.parms, args, proc.env)
             else:
-                return proc(*args)
+                try:
+                    return proc(*args)
+                except:
+                    print('proc:', proc)
+                    print('args:', args)
+                    raise
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description='LispTorch: Let\'s use PyTorch in the classic Lisp style!')

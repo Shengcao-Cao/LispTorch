@@ -24,7 +24,7 @@
                               (define output (model data))
                               (define pred (t_argmax output dim:1 keepdim:#t))
                               (define correct_i (t_item (t_sum (t_eq pred (t_view target (t_size pred))) dim:0)))
-                              (define total_i (t_size target 0))
+                              (define total_i (car (t_size target)))
                               (test model test_itr (- iteration 1) (+ correct correct_i) (+ total total_i)))))))
 
 (define train_test
