@@ -98,6 +98,10 @@ def eval(x, env):
             header = x[1] + '.lisp'
             repl_file(header, env)
             return None
+        elif x[0] == 'begin':
+            for exp in x[1:-1]:
+                eval(exp, env)
+            x = x[-1]
         else:                          # (proc arg...)
             try:
                 proc = eval(x[0], env)

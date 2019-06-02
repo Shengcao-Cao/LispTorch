@@ -14,7 +14,6 @@ def standard_env():
         'abs':     abs,
         'append':  op.add,
         'apply':   lambda x, y: x(*y),
-        'begin':   lambda *x: x[-1],
         'car':     lambda x: x[0],
         'cdr':     lambda x: x[1:],
         'cons':    lambda x, y: [x] + y,
