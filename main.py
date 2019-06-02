@@ -2,12 +2,31 @@ from lt_types import *
 from lt_parser import *
 from lt_env import *
 
+def finished(tokens):
+    count = 0
+    for token in tokens:
+        if token == '(':
+            count += 1
+        elif token == ')':
+            count -=1
+        if count < 0:
+            return True
+    if count == 0:
+        return True
+    else:
+        return False
+
 def repl(env, prompt='>>> '):
     "A prompt-read-eval-print loop."
+    all_tokens = []
     while True:
-        val = eval(parse(input(prompt)), env)
-        if val is not None:
-            print(lispstr(val))
+        tokens = tokenize(input(prompt))
+        all_tokens += tokens
+        while finished(all_tokens) and len(all_tokens) > 0:
+            parse_result, all_tokens = parse(all_tokens)
+            val = eval(parse_result, env)
+            if val is not None:
+                print(lispstr(val))
 
 def lispstr(exp):
     "Convert a Python object back into a Lisp-readable string."
