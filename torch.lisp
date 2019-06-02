@@ -115,7 +115,6 @@
 (define t_hamming_window (lambda (window_length periodic:#t alpha:0_54 beta:0_46 dtype:#n layout:t_strided device:#n requires_grad:#f) (_torch_hamming_window window_length periodic alpha beta dtype layout device requires_grad)))
 (define t_cross (lambda (input other dim:-1 out:#n) (_torch_cross input other dim out)))
 (define t_diag (lambda (input diagonal:0 out:#n) (_torch_diag input diagonal out)))
-(define t_einsum (lambda (equation *operands) (_torch_einsum equation *operands)))
 (define t_flatten (lambda (input start_dim:0 end_dim:-1) (_torch_flatten input start_dim end_dim)))
 (define t_flip (lambda (input dims) (_torch_flip input dims)))
 (define t_tensordot (lambda (a b dims:2) (_torch_tensordot a b dims)))

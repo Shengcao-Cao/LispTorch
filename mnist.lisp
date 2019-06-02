@@ -1,21 +1,5 @@
 (include torch)
 
-(define Net
-    (lambda ()
-            (begin (define conv1 (t_nn_Conv2d 1 20 5 1))
-                   (define conv2 (t_nn_Conv2d 20 50 5 1))
-                   (define fc1 (t_nn_Linear 800 500))
-                   (define fc2 (t_nn_Linear 500 10))
-                   (lambda (x0)
-                           (begin (define x1 (t_F_relu (conv1 x0)))
-                                  (define x2 (t_F_max_pool2d x1 2 2))
-                                  (define x3 (t_F_relu (conv2 x2)))
-                                  (define x4 (t_F_max_pool2d x3 2 2))
-                                  (define x5 (t_view x4 (list -1 800)))
-                                  (define x6 (t_F_relu (fc1 x5)))
-                                  (define x7 (fc2 x6))
-                                  (t_F_log_softmax x7 dim:1))))))
-
 (define train
     (lambda (model device train_itr optimizer iteration)
             (begin (if (<= iteration 0)
@@ -62,8 +46,11 @@
 (define test_loader (t_utils_data_DataLoader train_dataset batch_size:128 shuffle:#f num_workers:4 pin_memory:#t))
 (define test_itr (iter test_loader))
 
-(define device (t_device "cuda"))
-(define model (t_to (Net) device))
+(define model
+  (t_nn_Sequential (list 
+    (t_nn_Conv2d (list 1 20 5 1))
+    (t_nn_ReLU)
+    (t_nn_Conv2d (list ))
 
 (define optimizer (t_optim_SGD (t_parameters model) lr:0.01 momentum:0.9))
 

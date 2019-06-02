@@ -122,7 +122,6 @@ my_list = [
 	'torch.hamming_window(window_length, periodic=True, alpha=0.54, beta=0.46, dtype=None, layout=torch.strided, device=None, requires_grad=False)',
 	'torch.cross(input, other, dim=-1, out=None)',
 	'torch.diag(input, diagonal=0, out=None)',
-	'torch.einsum(equation, *operands)',
 	'torch.flatten(input, start_dim=0, end_dim=-1)',
 	'torch.flip(input, dims)',
 	'torch.tensordot(a, b, dims=2)',

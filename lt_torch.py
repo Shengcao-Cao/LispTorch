@@ -120,7 +120,6 @@ torch_env = {
     '_torch_hamming_window': lambda window_length, periodic, alpha, beta, dtype, layout, device, requires_grad: torch.hamming_window(window_length=window_length, periodic=periodic, alpha=alpha, beta=beta, dtype=dtype, layout=layout, device=device, requires_grad=requires_grad),
     '_torch_cross': lambda input, other, dim, out: torch.cross(input=input, other=other, dim=dim, out=out),
     '_torch_diag': lambda input, diagonal, out: torch.diag(input=input, diagonal=diagonal, out=out),
-    '_torch_einsum': lambda equation, operands: torch.einsum(equation, *operands=*operands),
     '_torch_flatten': lambda input, start_dim, end_dim: torch.flatten(input=input, start_dim=start_dim, end_dim=end_dim),
     '_torch_flip': lambda input, dims: torch.flip(input=input, dims=dims),
     '_torch_tensordot': lambda a, b, dims: torch.tensordot(a=a, b=b, dims=dims),
