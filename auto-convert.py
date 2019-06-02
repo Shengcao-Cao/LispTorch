@@ -23,9 +23,25 @@ def convert(string):
 	name = tokens[0].replace('torch.', '_torch_')
 
 	if '*' in string:
-		print("'%s': lambda args, **kwargs: %s(*args, **kwargs)," % (name, tokens[0]))
+		args = []
+		tokens = [token.replace(',', '') for token in tokens]
+		for token in tokens[2:-1]:
+			if '=' in token:
+				args.append(token.split('=')[0])
+			else:
+				args.append(token)
+		double_args = [arg+'='+arg for arg in args[1:]]
+		print("    '%s': lambda %s: %s(%s)," % (name, ', '.join(args).replace('*', ''), tokens[0], args[0] + ', ' + ', '.join(double_args)))
 	else:
-		print("'%s': %s," % (name, tokens[0]))
+		args = []
+		tokens = [token.replace(',', '') for token in tokens]
+		for token in tokens[2:-1]:
+			if '=' in token:
+				args.append(token.split('=')[0])
+			else:
+				args.append(token)
+		double_args = [arg+'='+arg for arg in args]
+		print("    '%s': lambda %s: %s(%s)," % (name, ', '.join(args), tokens[0], ', '.join(double_args)))
 
 def lisp_func(string):
 	raw_tokens = tokenize(string)
@@ -56,13 +72,14 @@ def lisp_func(string):
 		else:
 			args.append(token)
 
-	func += ' ' + ' '.join(args) + ')'
+	func += ' ' + ' '.join(args) + ')))'
 
 	print(func)
 
 
 if __name__ == '__main__':
 	print('{')
+	print("    't-strided': torch.strided,")
 	for func in my_list:
 		convert(func)
 	print('}')
